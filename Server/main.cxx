@@ -4,50 +4,53 @@
 #include <steam/isteamnetworkingutils.h>
 #include <cassert>
 #include <cstdio>
+#include <list>
 bool toTerminateServerProcess = false;
 class User{
 	public:
-		uint64_t user_id;
+		uint64_t user_id; //(0 is invalid)
 };
 class UserSession{
 	public:
 		HSteamNetConnection m_hConn; //connection handle
 		User session_user;
 };
+bool operator==(const User& a, const User& b){
+	return a.user_id==b.user_id;
+}
+bool operator==(const UserSession& a, const UserSession& b){
+	return (a.m_hConn == b.m_hConn && a.session_user == b.session_user);
+}
 class SessionsManager{
 	public: 
 		UserSession * findUserSessionByConnection(HSteamNetConnection m_hConn)
 		{
-			for (const UserSession& session: this->sessions)
+			for (UserSession& session: this->sessions)
 			{
 				if (session.m_hConn == m_hConn)
 				{
 					return &session;
 				}
 			}
-			return nullptr;
+			return NULL;
 		}
-		int removeUserSession(UserSession * session)
+		bool removeUserSession(UserSession * session)
 		{
-			//I presume that this will always be called as removeUserSession(findUserSessionByConnection(m_hConn))
-			if (session == nullptr)
-			{
-				return 0;
-			}
-
+			//This will NOT always be called as removeUserSession(findUserSessionByConnection(m_hConn)). In many cases, the user will simply click 'leave game' rather than unplugging their ethernet cord.
+			if(!session)
+				return false;
+			
 			this->sessions.remove(*session);
-			return 1;
+			return true;
 		}
-		int addUserSession(HSteamNetConnection m_hConn)
+		bool addUserSession(HSteamNetConnection m_hConn)
 		{
 			UserSession new_session;
 			new_session.m_hConn = m_hConn;
+			new_session.session_user.user_id = 0;
 			sessions.push_back(new_session);
-			if (findUserSessionByConnection(m_hConn) == nullptr)
-			{
-				return 0;
-			}
-			return 1;
+			assert(findUserSessionByConnection(m_hConn));
+			return true;
 			
 		}
 	private:
@@ -135,6 +138,7 @@ class Server{
 			m_pInterface->RunCallbacks();
 		}
 };
+Server *Server::s_pCallbackInstance=NULL;
 int main(int argc, char ** argv){
 	SteamDatagramErrMsg errmsg;
 	if(!GameNetworkingSockets_Init(NULL,errmsg)){
