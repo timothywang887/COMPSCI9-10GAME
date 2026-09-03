@@ -16,9 +16,43 @@ class UserSession{
 };
 class SessionsManager{
 	public: 
-		UserSession * findUserSessionByConnection(HSteamNetConnection m_hConn);
-		int removeUserSession(UserSession * session);
-		int addUserSession(HSteamNetConnection m_hConn);
+		UserSession * findUserSessionByConnection(HSteamNetConnection m_hConn)
+		{
+			for (const UserSession& session: this->sessions)
+			{
+				if (session.m_hConn == m_hConn)
+				{
+					return &session;
+				}
+			}
+			return nullptr;
+		}
+		int removeUserSession(UserSession * session)
+		{
+			//I presume that this will always be called as removeUserSession(findUserSessionByConnection(m_hConn))
+			if (session == nullptr)
+			{
+				return 0;
+			}
+
+			this->sessions.remove(*session);
+			return 1;
+		}
+		int addUserSession(HSteamNetConnection m_hConn)
+		{
+			UserSession new_session;
+			new_session.m_hConn = m_hConn;
+			sessions.push_back(new_session);
+			if (findUserSessionByConnection(m_hConn) == nullptr)
+			{
+				return 0;
+			}
+			return 1;
+			
+		}
+	private:
+		std::list<UserSession> sessions;
+
 };
 class Server{
 	public:
