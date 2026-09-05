@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public float groundCheckRadius = 0.2f;
 
     private Vector3 moveVelocity;
+    public enum PlayerState { Idle, Walking}
+    public PlayerState currentState = PlayerState.Idle;
 
     void Start()
     {
@@ -36,6 +38,14 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && Input.GetButtonDown("Jump"))
         {
             Jump();
+        }
+        if (input.magnitude > 0)
+        {
+            currentState = PlayerState.Walking;
+        }
+        else
+        {
+            currentState = PlayerState.Idle;
         }
     }
 
