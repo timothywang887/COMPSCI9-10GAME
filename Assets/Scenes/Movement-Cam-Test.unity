@@ -1089,6 +1089,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundCheckRadius: 0.3
+  currentState: 0
 --- !u!54 &1933424193
 Rigidbody:
   m_ObjectHideFlags: 0
