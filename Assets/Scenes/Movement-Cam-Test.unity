@@ -453,6 +453,10 @@ MonoBehaviour:
   playerTransform: {fileID: 1933424191}
   wobbleSpeed: 0.3
   wobbleAmount: 0.003
+  tiltAmountX: 1
+  tiltAmountY: 1
+  tiltAmountZ: 1
+  movementTiltSpeed: 5
 --- !u!1 &1089243397
 GameObject:
   m_ObjectHideFlags: 0
