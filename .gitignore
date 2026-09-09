@@ -76,3 +76,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+#Ignore .blend1 files - they are only backups. Keep them on your machine, but do not push them
+*.blend1
