@@ -16,8 +16,18 @@ public class PlayerCamera : MonoBehaviour
     public float wobbleSpeed = 1f;
     public float wobbleAmount = 0.1f;
 
+    [Header("Movement Tilt Settings")]
+    public float tiltAmountX = 2f;        // Pitch tilt intensity (forward/backward)
+    public float tiltAmountY = 2f;        // Vertical movement tilt intensity (jumping/falling)
+    public float tiltAmountZ = 3f;        // Roll tilt intensity (strafing left/right)
+    public float movementTiltSpeed = 5f;  // Speed of the tilt reaction
+
     private PlayerMovement.PlayerState playerState;
     private float currentZRoll = 0f;
+
+    // Smoothed movement tilt values
+    private float smoothTiltX = 0f;
+    private float smoothTiltZ = 0f;
 
     void Start()
     {
@@ -82,16 +92,30 @@ public class PlayerCamera : MonoBehaviour
     {
         if (playerRb != null)
         {
-            // Base the roll target on the smoothed turn velocity rather than raw spiking frame input
-            float targetRoll = Mathf.Clamp((-smoothTurnVelocity) * 75f, -200f, 200f);
+            // 1. Calculate the local velocity of the player Rigidbody using Vector3
+            Vector3 localVelocity = playerTransform.InverseTransformDirection(playerRb.linearVelocity);
 
-            // True frame-rate independent lerp using decay
+            // 2. Map velocities to target tilts
+            // Combined Pitch: Forward/backward movement (.z) AND vertical jumping/falling (.y)
+            float targetTiltX = (localVelocity.z * tiltAmountX) + (localVelocity.y * tiltAmountY); 
+            
+            // Strafing right (positive X velocity) rolls the camera left (negative Z tilt)
+            float targetTiltZ = -localVelocity.x * tiltAmountZ;
+
+            // 3. Smooth the movement tilts safely using frame-rate independent exponential decay
+            float tiltDecayFactor = 1.0f - Mathf.Exp(-movementTiltSpeed * Time.deltaTime);
+            smoothTiltX = Mathf.Lerp(smoothTiltX, targetTiltX, tiltDecayFactor);
+            smoothTiltZ = Mathf.Lerp(smoothTiltZ, targetTiltZ, tiltDecayFactor);
+
+            // 4. Handle Mouse Turning Z-Roll (Mouse roll combined with movement roll)
+            float targetMouseRoll = Mathf.Clamp((-smoothTurnVelocity) * 75f, -200f, 200f) * 0.5f;
             float rollLerpSpeed = 8f;
-            float decayFactor = 1.0f - Mathf.Exp(-rollLerpSpeed * Time.deltaTime);
-            currentZRoll = Mathf.Lerp(currentZRoll, targetRoll, decayFactor);
+            Debug.Log(Mathf.Exp(-rollLerpSpeed * Time.deltaTime));
+            float rollDecayFactor = 1f - Mathf.Exp(-rollLerpSpeed * Time.deltaTime);
+            currentZRoll = Mathf.Lerp(currentZRoll, targetMouseRoll, rollDecayFactor);
 
-            // Apply orientation cleanly
-            transform.localRotation = Quaternion.Euler(xRotation, 0f, currentZRoll);
+            // 5. Combine everything cleanly into the final local rotation
+            transform.localRotation = Quaternion.Euler(xRotation + smoothTiltX, 0f, currentZRoll + smoothTiltZ);
         }
         else
         {
