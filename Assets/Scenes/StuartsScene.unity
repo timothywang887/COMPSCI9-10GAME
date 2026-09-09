@@ -449,7 +449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e2fefaaf2bb2c4aaf2f4af10a35229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
-  sensitivity: 3
+  sensitivity: 1.4
   playerTransform: {fileID: 1933424191}
   wobbleSpeed: 0.3
   wobbleAmount: 0.003
