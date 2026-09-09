@@ -68,7 +68,7 @@ public class PlayerCamera : MonoBehaviour
                 float targetRoll = Mathf.Clamp((-mouseX) * 75f, -20f, 20f);
 
                
-                currentZRoll = Mathf.Lerp(currentZRoll, targetRoll, 10f * Time.deltaTime);
+                currentZRoll = Mathf.Lerp(currentZRoll, targetRoll, 11f * Time.deltaTime);
 
               
                 transform.localRotation = Quaternion.Euler(xRotation, 0f, currentZRoll);
