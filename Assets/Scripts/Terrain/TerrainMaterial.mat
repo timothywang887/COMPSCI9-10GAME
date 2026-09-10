@@ -66,18 +66,21 @@ Material:
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
+    - _ColorNoiseScale: 0.1
+    - _ColorNoiseStrength: 0.05
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _MaxTerrainHeight: 0.1
+    - _MaxTerrainHeight: 38.527245
     - _Metallic: 0
-    - _MinTerrainHeight: -0.1
+    - _MinTerrainHeight: 7.3341365
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Smoothness: 0.05
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

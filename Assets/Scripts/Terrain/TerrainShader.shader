@@ -2,10 +2,13 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
-        // Exposing these properties lets the C# script talk to the shader
         _TerrainGradient ("Terrain Gradient", 2D) = "white" {}
-        _MinTerrainHeight ("Min Terrain Height", Float) = 0
-        _MaxTerrainHeight ("Max Terrain Height", Float) = 1
+        _MinTerrainHeight ("Min Height Threshold", Float) = 0
+        _MaxTerrainHeight ("Max Height Threshold", Float) = 1
+        _Smoothness ("Surface Smoothness", Range(0,1)) = 0.05
+        
+        _ColorNoiseScale ("Color Noise Scale", Float) = 0.1
+        _ColorNoiseStrength ("Color Noise Strength", Float) = 0.05
     }
     SubShader
     {
@@ -16,24 +19,56 @@ Shader "Custom/TerrainShader"
         #pragma surface surf Standard fullforwardshadows
         #pragma target 3.0
 
-        // Variables match the property block above
         sampler2D _TerrainGradient;
         float _MinTerrainHeight;
         float _MaxTerrainHeight;
+        float _Smoothness;
+        
+        float _ColorNoiseScale;
+        float _ColorNoiseStrength;
+        float4 _SeedOffset;
 
         struct Input
         {
-            float3 worldPos; // Removed unused uv_MainTex
+            float3 worldPos; 
         };
+
+        // Pseudo-random 2D noise algorithm for the shader color variation
+        float hash2D(float2 p)
+        {
+            return frac(sin(dot(p, float2(127.1, 311.7))) * 43758.5453123);
+        }
+
+        float noise2D(float2 p)
+        {
+            float2 i = floor(p);
+            float2 f = frac(p);
+            float2 u = f * f * (3.0 - 2.0 * f);
+
+            return lerp(lerp(hash2D(i + float2(0.0, 0.0)), hash2D(i + float2(1.0, 0.0)), u.x),
+                        lerp(hash2D(i + float2(0.0, 1.0)), hash2D(i + float2(1.0, 1.0)), u.x), u.y);
+        }
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            // Calculate a 0 to 1 value representing where this vertex is between min and max height
-            float heightValue = saturate((IN.worldPos.y - _MinTerrainHeight) / (_MaxTerrainHeight - _MinTerrainHeight));
+            // Extract clean localized height relative to the object transform position
+            float absoluteY = IN.worldPos.y - unity_ObjectToWorld._m13;
 
-            // Sample the gradient texture using our 0-1 height mapping
-            // (Passed into the V coordinate since our texture is 1px wide by 100px tall)
-            o.Albedo = tex2D(_TerrainGradient, float2(0.5, heightValue)).rgb;
+            // 1:1 perfect gradient fit using the true min/max heights from C#
+            float heightValue = saturate((absoluteY - _MinTerrainHeight) / (_MaxTerrainHeight - _MinTerrainHeight));
+
+            // Generate procedural color noise using X and Z horizontal space coordinates
+            float2 noiseUV = IN.worldPos.xz * _ColorNoiseScale + _SeedOffset.xy;
+            float n = noise2D(noiseUV) * 2.0 - 1.0; // Puts noise in a -1 to 1 range
+
+            // Apply the color noise directly to twist the height value sampling slightly 
+            float modifiedHeight = saturate(heightValue + (n * _ColorNoiseStrength));
+
+            // Sample the gradient color map using our newly offset height value
+            o.Albedo = tex2D(_TerrainGradient, float2(0.5, modifiedHeight)).rgb;
+            
+            o.Metallic = 0.0;
+            o.Smoothness = _Smoothness;
         }
         ENDCG
     }
