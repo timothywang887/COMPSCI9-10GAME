@@ -65,30 +65,34 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BrightnessRange: 0.02
+    - _BrightnessRange: 0
     - _BumpScale: 1
-    - _ColorNoiseScale: 0.1
-    - _ColorNoiseStrength: 0.05
+    - _ColorNoiseScale: -0.04
+    - _ColorNoiseStrength: 0.0525
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _HueShiftRange: 0.033
+    - _HueRand: 0.024
+    - _HueShiftRange: 0
     - _MaxTerrainHeight: 40.43273
     - _Metallic: 0
     - _MinTerrainHeight: 11.0375
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _SatRand: 0.019
     - _Smoothness: 0.05
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TexNoiseDensity: 1.66
+    - _TexFrequency: 4
+    - _TexNoiseDensity: 0
     - _TexNoiseSize: 1.71
     - _UVSec: 0
+    - _ValRand: 0.012
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

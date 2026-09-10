@@ -18,15 +18,11 @@ public class TerrainGenerator : MonoBehaviour
     [Range(0f, 1f)] [SerializeField] float persistence = 0.4f;
     [SerializeField] float lacunarity = 2.5f;
 
-    [Header("Color Variation (Macro Noise)")]
-    [Range(0f, 0.2f)] [SerializeField] float colorNoiseStrength = 0.05f;
-    [SerializeField] float colorNoiseScale = 0.1f;
-
-    [Header("Micro-Texture Detail Noise")]
-    [SerializeField] float textureNoiseSize = 2.0f;       // Scale/size of the micro-dots
-    [Range(0f, 5f)] [SerializeField] float textureNoiseDensity = 1.0f; // High frequency/density booster
-    [Range(0f, 0.5f)] [SerializeField] float hueShiftRange = 0.05f;    // Max rainbow shift range
-    [Range(0f, 0.5f)] [SerializeField] float brightnessRange = 0.15f;  // Max dark/light detail pop
+    [Header("Texture Cell Settings (Anti-Repeating)")]
+    [SerializeField] float textureFrequency = 4.0f; 
+    [Range(0f, 0.3f)] [SerializeField] float hueVariance = 0.04f;
+    [Range(0f, 0.5f)] [SerializeField] float saturationVariance = 0.1f;
+    [Range(0f, 0.5f)] [SerializeField] float brightnessVariance = 0.15f;
 
     [Header("Stylization")]
     [SerializeField] Gradient terrainGradient;
@@ -100,15 +96,13 @@ public class TerrainGenerator : MonoBehaviour
         mat.SetFloat("_MaxTerrainHeight", trueMaxHeight);
         
         int seedHash = generationSeed.GetHashCode() % 50000;
-        mat.SetFloat("_ColorNoiseScale", colorNoiseScale);
-        mat.SetFloat("_ColorNoiseStrength", colorNoiseStrength);
-        mat.SetVector("_SeedOffset", new Vector4(seedHash, seedHash, 0, 0));
+        // Generate diverse coordinates to break all axes of orientation repetition
+        mat.SetVector("_SeedOffset", new Vector4(seedHash * 0.13f, seedHash * 0.71f, seedHash * 0.43f, seedHash));
 
-        // Send micro-texture settings to shader
-        mat.SetFloat("_TexNoiseSize", textureNoiseSize);
-        mat.SetFloat("_TexNoiseDensity", textureNoiseDensity);
-        mat.SetFloat("_HueShiftRange", hueShiftRange);
-        mat.SetFloat("_BrightnessRange", brightnessRange);
+        mat.SetFloat("_TexFrequency", textureFrequency);
+        mat.SetFloat("_HueRand", hueVariance);
+        mat.SetFloat("_SatRand", saturationVariance);
+        mat.SetFloat("_ValRand", brightnessVariance);
     }
 
     private void GenerateTerrainStructure() 
