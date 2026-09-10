@@ -5,7 +5,7 @@ using UnityEngine;
 public class TerrainGenerator : MonoBehaviour 
 {
     [Header("Dimensions")]
-    [SerializeField] int xSize = 20; // Bumped up slightly to see color noise variations beautifully
+    [SerializeField] int xSize = 20;
     [SerializeField] int zSize = 20;
     [SerializeField] int xOffset = 0;
     [SerializeField] int zOffset = 0;
@@ -18,9 +18,15 @@ public class TerrainGenerator : MonoBehaviour
     [Range(0f, 1f)] [SerializeField] float persistence = 0.4f;
     [SerializeField] float lacunarity = 2.5f;
 
-    [Header("Color Variation Settings")]
+    [Header("Color Variation (Macro Noise)")]
     [Range(0f, 0.2f)] [SerializeField] float colorNoiseStrength = 0.05f;
     [SerializeField] float colorNoiseScale = 0.1f;
+
+    [Header("Micro-Texture Detail Noise")]
+    [SerializeField] float textureNoiseSize = 2.0f;       // Scale/size of the micro-dots
+    [Range(0f, 5f)] [SerializeField] float textureNoiseDensity = 1.0f; // High frequency/density booster
+    [Range(0f, 0.5f)] [SerializeField] float hueShiftRange = 0.05f;    // Max rainbow shift range
+    [Range(0f, 0.5f)] [SerializeField] float brightnessRange = 0.15f;  // Max dark/light detail pop
 
     [Header("Stylization")]
     [SerializeField] Gradient terrainGradient;
@@ -30,7 +36,6 @@ public class TerrainGenerator : MonoBehaviour
     private Texture2D gradientTexture;
     private MeshCollider meshCollider;
 
-    // Track the true geometric bounds of our mathematical noise
     private float trueMinHeight = 0f;
     private float trueMaxHeight = 1f;
 
@@ -91,16 +96,19 @@ public class TerrainGenerator : MonoBehaviour
         if (mat == null || mesh == null) return;
         
         mat.SetTexture("_TerrainGradient", gradientTexture);
-        
-        // Pass the actual geometric peak and valley points to the shader
         mat.SetFloat("_MinTerrainHeight", trueMinHeight);
         mat.SetFloat("_MaxTerrainHeight", trueMaxHeight);
         
-        // Pass variables to drive procedural color noise variations
         int seedHash = generationSeed.GetHashCode() % 50000;
         mat.SetFloat("_ColorNoiseScale", colorNoiseScale);
         mat.SetFloat("_ColorNoiseStrength", colorNoiseStrength);
         mat.SetVector("_SeedOffset", new Vector4(seedHash, seedHash, 0, 0));
+
+        // Send micro-texture settings to shader
+        mat.SetFloat("_TexNoiseSize", textureNoiseSize);
+        mat.SetFloat("_TexNoiseDensity", textureNoiseDensity);
+        mat.SetFloat("_HueShiftRange", hueShiftRange);
+        mat.SetFloat("_BrightnessRange", brightnessRange);
     }
 
     private void GenerateTerrainStructure() 
@@ -109,7 +117,6 @@ public class TerrainGenerator : MonoBehaviour
         Vector3[] gridVertices = new Vector3[(xSize + 1) * (zSize + 1)];
         int i = 0;
 
-        // Reset tracking boundaries
         trueMinHeight = float.MaxValue;
         trueMaxHeight = float.MinValue;
 
@@ -135,7 +142,6 @@ public class TerrainGenerator : MonoBehaviour
                 float finalHeight = yPos * heightMultiplier;
                 gridVertices[i] = new Vector3(x, finalHeight, z);
 
-                // Dynamically find the real mathematical extremities of the current layout
                 if (finalHeight < trueMinHeight) trueMinHeight = finalHeight;
                 if (finalHeight > trueMaxHeight) trueMaxHeight = finalHeight;
 
@@ -143,7 +149,6 @@ public class TerrainGenerator : MonoBehaviour
             }
         }
 
-        // Unpack grid positions into individual non-shared vertex faces for crisp flat shading
         Vector3[] flatVertices = new Vector3[xSize * zSize * 6];
         int[] flatTriangles = new int[xSize * zSize * 6];
         int currentTriangleIndex = 0;

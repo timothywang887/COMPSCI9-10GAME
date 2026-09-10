@@ -65,6 +65,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BrightnessRange: 0.02
     - _BumpScale: 1
     - _ColorNoiseScale: 0.1
     - _ColorNoiseStrength: 0.05
@@ -74,9 +75,10 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _MaxTerrainHeight: 38.527245
+    - _HueShiftRange: 0.033
+    - _MaxTerrainHeight: 40.43273
     - _Metallic: 0
-    - _MinTerrainHeight: 7.3341365
+    - _MinTerrainHeight: 11.0375
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -84,6 +86,8 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _TexNoiseDensity: 1.66
+    - _TexNoiseSize: 1.71
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
