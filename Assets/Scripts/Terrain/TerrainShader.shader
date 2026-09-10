@@ -2,7 +2,10 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
-
+        // Exposing these properties lets the C# script talk to the shader
+        _TerrainGradient ("Terrain Gradient", 2D) = "white" {}
+        _MinTerrainHeight ("Min Terrain Height", Float) = 0
+        _MaxTerrainHeight ("Max Terrain Height", Float) = 1
     }
     SubShader
     {
@@ -11,27 +14,26 @@ Shader "Custom/TerrainShader"
 
         CGPROGRAM
         #pragma surface surf Standard fullforwardshadows
-
         #pragma target 3.0
 
-        sampler2D terrainGradient;
-        float minTerrainHeight;
-        float maxTerrainHeight;
+        // Variables match the property block above
+        sampler2D _TerrainGradient;
+        float _MinTerrainHeight;
+        float _MaxTerrainHeight;
 
         struct Input
         {
-            float2 uv_MainTex;
-            float3 worldPos;
+            float3 worldPos; // Removed unused uv_MainTex
         };
-
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            float3 worldPosY = IN.worldPos.y;
+            // Calculate a 0 to 1 value representing where this vertex is between min and max height
+            float heightValue = saturate((IN.worldPos.y - _MinTerrainHeight) / (_MaxTerrainHeight - _MinTerrainHeight));
 
-            float heightValue = saturate((worldPosY - minTerrainHeight) / (maxTerrainHeight - minTerrainHeight));
-
-            o.Albedo = tex2D(terrainGradient, float2(0, heightValue));
+            // Sample the gradient texture using our 0-1 height mapping
+            // (Passed into the V coordinate since our texture is 1px wide by 100px tall)
+            o.Albedo = tex2D(_TerrainGradient, float2(0.5, heightValue)).rgb;
         }
         ENDCG
     }

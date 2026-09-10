@@ -1,6 +1,7 @@
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+// Added typeof(MeshCollider) here so Unity handles the setup for you
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class TerrainGenerator : MonoBehaviour 
 {
     [SerializeField] int xSize = 10;
@@ -14,20 +15,35 @@ public class TerrainGenerator : MonoBehaviour
 
     private Mesh mesh;
     private Texture2D gradientTexture;
+    private MeshCollider meshCollider; // Reference to hold the collider
 
     void Start() 
     {
+        // Cache the MeshCollider component
+        meshCollider = GetComponent<MeshCollider>();
+
+        int groundLayerIndex = LayerMask.NameToLayer("Ground");
+        if (groundLayerIndex != -1)
+        {
+            gameObject.layer = groundLayerIndex;
+        }
+
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         
-        // Initialize texture once instead of every frame
         gradientTexture = new Texture2D(1, 100);
         gradientTexture.wrapMode = TextureWrapMode.Clamp;
 
-        GenerateTerrain();
+        //GenerateTerrain();
         GradientToTexture();
         UpdateShaderProperties();
     }
+
+    void Update()
+    {
+        GenerateTerrain();
+    }
+
 
     private void GradientToTexture() 
     {
@@ -47,7 +63,6 @@ public class TerrainGenerator : MonoBehaviour
         float minTerrainHeight = mesh.bounds.min.y + transform.position.y - 0.1f;
         float maxTerrainHeight = mesh.bounds.max.y + transform.position.y + 0.1f;
 
-        // Note: Ensure your custom shader property names exactly match these strings (e.g., "_TerrainGradient")
         mat.SetTexture("_TerrainGradient", gradientTexture);
         mat.SetFloat("_MinTerrainHeight", minTerrainHeight);
         mat.SetFloat("_MaxTerrainHeight", maxTerrainHeight);
@@ -76,7 +91,6 @@ public class TerrainGenerator : MonoBehaviour
         {
             for(int x = 0; x < xSize; x++) 
             {
-                // Current row vertex index logic
                 int currentVertex = x + (z * (xSize + 1));
 
                 triangles[triangleIndex + 0] = currentVertex + 0;
@@ -94,5 +108,9 @@ public class TerrainGenerator : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
+
+        // CRUCIAL: Update the collider to match the new mesh geometry
+        meshCollider.sharedMesh = null; // Clear the old reference to force an update
+        meshCollider.sharedMesh = mesh;
     }
 }
