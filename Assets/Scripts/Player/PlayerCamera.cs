@@ -21,6 +21,7 @@ public class PlayerCamera : MonoBehaviour
     public float tiltAmountY = 2f;        // Vertical movement tilt intensity (jumping/falling)
     public float tiltAmountZ = 3f;        // Roll tilt intensity (strafing left/right)
     public float movementTiltSpeed = 5f;  // Speed of the tilt reaction
+    public float mouseTiltFactor = 0.3f; //amount of tilt horizontal mouse movement causes
 
     private PlayerMovement.PlayerState playerState;
     private float currentZRoll = 0f;
@@ -108,7 +109,7 @@ public class PlayerCamera : MonoBehaviour
             smoothTiltZ = Mathf.Lerp(smoothTiltZ, targetTiltZ, tiltDecayFactor);
 
             // 4. Handle Mouse Turning Z-Roll (Mouse roll combined with movement roll)
-            float targetMouseRoll = Mathf.Clamp((-smoothTurnVelocity) * 75f, -200f, 200f) * 0.5f;
+            float targetMouseRoll = Mathf.Clamp((-smoothTurnVelocity) * 75f, -200f, 200f) * mouseTiltFactor;
             float rollLerpSpeed = 8f;
             Debug.Log(Mathf.Exp(-rollLerpSpeed * Time.deltaTime));
             float rollDecayFactor = 1f - Mathf.Exp(-rollLerpSpeed * Time.deltaTime);
