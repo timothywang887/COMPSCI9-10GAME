@@ -177,6 +177,9 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         mesh.Clear();
+
+        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+        
         mesh.vertices = flatVertices;
         mesh.triangles = flatTriangles;
         mesh.RecalculateNormals();

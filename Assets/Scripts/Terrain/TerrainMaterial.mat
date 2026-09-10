@@ -77,9 +77,9 @@ Material:
     - _GlossyReflections: 1
     - _HueRand: 0.024
     - _HueShiftRange: 0
-    - _MaxTerrainHeight: 40.43273
+    - _MaxTerrainHeight: 40.757446
     - _Metallic: 0
-    - _MinTerrainHeight: 11.0375
+    - _MinTerrainHeight: 7.8003087
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
