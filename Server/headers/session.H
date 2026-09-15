@@ -3,12 +3,13 @@
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
 #include <list>
+#include <string>
 class User{
 	public:
 		uint64_t user_id; //(0 is invalid)
 		std::string username;
 		//Some datatype for Yescrypt hash and some type of salt
-		//bool verifyLogin(std::string password, ? hash, ? salt) - zero out the used memory afterwards!
+		//bool verifyLogin(std::string username, char[72]password, ? hash, ? salt) - zero out the used memory afterwards!
 };
 class UserSession{
 	public:
