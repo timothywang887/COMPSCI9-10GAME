@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.unity.multiplayer.center": "1.0.1",
+    "com.unity.multiplayer.center": "2.0.1",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
@@ -20,6 +20,7 @@
     "com.unity.modules.screencapture": "1.0.0",
     "com.unity.modules.terrain": "1.0.0",
     "com.unity.modules.terrainphysics": "1.0.0",
+    "com.unity.modules.tetgen": "1.0.0",
     "com.unity.modules.tilemap": "1.0.0",
     "com.unity.modules.ui": "1.0.0",
     "com.unity.modules.uielements": "1.0.0",
