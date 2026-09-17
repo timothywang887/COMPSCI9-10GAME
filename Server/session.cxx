@@ -34,3 +34,6 @@ bool SessionsManager::addUserSession(HSteamNetConnection m_hConn){
 	 return true;
 }
 
+EResult UserSession::sendMessageTo(char * data, uint32_t length, int nSendFlags){
+	return SendMessageToConnection(this.m_hConn, data, length, nSendFlags, NULL);
+}

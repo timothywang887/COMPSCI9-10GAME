@@ -86,7 +86,7 @@ class Server{
 			m_pInterface->RunCallbacks();
 		}
 };
-Server *Server::s_pCallbackInstance=NULL;
+Server * Server::s_pCallbackInstance=NULL;
 int main(int argc, char ** argv){
 	SteamDatagramErrMsg errmsg;
 	if(!GameNetworkingSockets_Init(NULL,errmsg)){

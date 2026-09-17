@@ -15,6 +15,7 @@ class UserSession{
 	public:
 		HSteamNetConnection m_hConn; //connection handle
 		User session_user;
+		EResult sendMessageTo(char * data, uint32_t length, int nSendFlags);
 };
 bool operator==(const User& a, const User& b);
 bool operator==(const UserSession& a, const UserSession& b);
