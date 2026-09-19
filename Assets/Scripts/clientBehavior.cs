@@ -2,9 +2,44 @@ using UnityEngine;
 using ValveSockets;
 using System;
 using System.Text;
-
+using ENCVAL_TEMP = System.Char[2048];
 public class clientBehavior : MonoBehaviour
 {
+    
+    enum PARSING_RESLULT
+    {
+        PR_GARBAGE,
+        PR_GARBEAGE_OURFAULT,
+        PR_ILLOGICAL,
+        PR_PROTOMISMATCH,
+        PR_PARTRECV,
+        PR_TOKENINVALID,
+        PR_SUCCESSFUL
+    }
+    enum MESSAGE_TYPE
+    {
+        CS_AUTHRQ,
+        CS_LOGINRQ,
+        CS_MAPJOINRQ,
+        CS_GSSJOINRQ,
+        CS_HSYNCRQ,
+        CS_INVSYNCHRQ,
+        CS_ANIMATIONRQ,
+
+        SC_HSYNCRQ,
+        SC_TOKENRSP,
+    }
+
+    struct Protocol_Msg
+    {
+        char[10] wizardweedchecksum;
+        ushort rqrspandpvr;
+        uint message_len;
+        ENVAL_TEMP tokening;
+        MESSAGE_TYPE type;
+        ulong message_id_or_response_to;
+    }
+
     uint connection = 0;
     Address address = new Address();
     NetworkingSockets client = new NetworkingSockets();
