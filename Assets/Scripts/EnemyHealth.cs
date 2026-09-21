@@ -1,4 +1,4 @@
-
+// IMPORTANT: This script should be deleted, and its functionality moved to either Character.cs or Enemy.cs, as applicable.
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
