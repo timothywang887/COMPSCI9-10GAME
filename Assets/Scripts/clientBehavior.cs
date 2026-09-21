@@ -1,8 +1,9 @@
 using UnityEngine;
-using ValveSockets;
+using Valve.Sockets;
 using System;
 using System.Text;
-using ENCVAL_TEMP = System.Char[];
+using System.Collections.Generic;
+//using ENCVAL_TEMP = System.Char[];
 public class clientBehavior : MonoBehaviour
 {
     
@@ -32,10 +33,10 @@ public class clientBehavior : MonoBehaviour
 
     struct Protocol_Msg
     {
-        char[10] wizardweedchecksum;
+        char[] wizardweedchecksum;//size 10
         ushort rqrspandpvr;
         uint message_len;
-        ENVAL_TEMP tokening;
+        char[] tokening;//size 2048
         MESSAGE_TYPE type;
         ulong message_id_or_response_to;
     }
@@ -43,7 +44,7 @@ public class clientBehavior : MonoBehaviour
     uint connection = 0;
     Address address = new Address();
     NetworkingSockets client = new NetworkingSockets();
-    int port = 67; // placeholder for port number
+    ushort port; // placeholder for port number
     StatusCallback statusCallback;
     MessageCallback messageCallback;
 
@@ -68,7 +69,7 @@ public class clientBehavior : MonoBehaviour
             }
         };
 
-        utils.SetStatusCallback(statusCallback);
+        NetworkingUtils.SetStatusCallback(statusCallback);
 
         // Unsure about the ip(it can change) or the port.
         address.SetAddress("10.230.41.9", port);
@@ -88,7 +89,7 @@ public class clientBehavior : MonoBehaviour
 
     }
 
-    private void SendMessage(string message)
+    private void Send(string message)
     {
         byte[] messageBytes = Encoding.UTF8.GetBytes(message);
         client.SendMessageToConnection(connection, messageBytes);
