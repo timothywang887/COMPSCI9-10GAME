@@ -2,7 +2,7 @@ using UnityEngine;
 using ValveSockets;
 using System;
 using System.Text;
-using ENCVAL_TEMP = System.Char[2048];
+using ENCVAL_TEMP = System.Char[];
 public class clientBehavior : MonoBehaviour
 {
     
