@@ -3,11 +3,10 @@
 #include <cassert>
 #include <cstdio>
 #include "headers/session.H"
+#include "headers/comm.H"
 bool toTerminateServerProcess = false;
-
-class Server{
-	public:
-		int doLiterallyEverything(uint32_t port){
+Server SERVER_INSTANCE;
+		int Server::doLiterallyEverything(uint32_t port){
 			m_pInterface = SteamNetworkingSockets();
 			SteamNetworkingIPAddr serverAddr;
 			serverAddr.Clear();
@@ -29,13 +28,8 @@ class Server{
 			assert(m_pInterface->DestroyPollGroup(m_hPollGroup));
 			return 1;
 		}
-	private:
-		ISteamNetworkingSockets *m_pInterface;
-		HSteamNetPollGroup m_hPollGroup; //According to docs, allows you to poll multiple connections efficiently at the same time - should we assign them per game instance? Something to consider.
-		HSteamListenSocket m_hListenSock;
-		SessionsManager Sessions;
 
-		void GNS_PollIncoming(){
+		void Server::GNS_PollIncoming(){
 			while(!toTerminateServerProcess){
 				ISteamNetworkingMessage *incoming_msg = NULL;
 				int n_msgs = m_pInterface->ReceiveMessagesOnPollGroup(m_hPollGroup, &incoming_msg, 1);
@@ -47,7 +41,7 @@ class Server{
 				incoming_msg->Release();
 			}
 		}
-		void GNS_SteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t change){
+		void Server::GNS_SteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t change){
 			//From docs: new connection, connection accepted by remote (will not happen), connection closed by remote, problem with connection (localhost closed)
 			switch(change.m_info.m_eState){
 				case k_ESteamNetworkingConnectionState_None:
@@ -77,23 +71,20 @@ class Server{
 					assert(false);	
 			}
 		}
-		static Server *s_pCallbackInstance;
-		static void GNS_SteamNetConnectionStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t change){ //Workaround. 
+		void Server::GNS_SteamNetConnectionStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t change){ //Workaround. 
 			s_pCallbackInstance->GNS_SteamNetConnectionStatusChanged(change);
 		}
-		void GNS_PollConnectionStatusChanges(){
+		void Server::GNS_PollConnectionStatusChanges(){
 			s_pCallbackInstance = this;
 			m_pInterface->RunCallbacks();
 		}
-};
 Server * Server::s_pCallbackInstance=NULL;
 int main(int argc, char ** argv){
 	SteamDatagramErrMsg errmsg;
 	if(!GameNetworkingSockets_Init(NULL,errmsg)){
 		return 1;
 	}
-	Server s;
-	s.doLiterallyEverything(1263);
+	SERVER_INSTANCE.doLiterallyEverything(1263);
 
 	//TODO: cleanup
 	GameNetworkingSockets_Kill();

@@ -7,7 +7,7 @@
 #include "session.H"
 
 #define PROTOCOL_VERSION (0b000)
-typedef ENCVAL_TEMP char[2048]
+typedef char ENCVAL_TEMP[2048];
 enum PARSING_RESULT{
 	PR_GARBAGE,
 	PR_GARBAGE_OURFAULT,
@@ -28,16 +28,16 @@ enum MESSAGE_TYPE{
 
         SC_HSYNCRQ,
         SC_TOKENRSP,
-}
+};
 struct Protocol_Msg{
-        char[10] wizardweed_notchecksum;
+        char wizardweed_notchecksum[10];
         uint16_t rqrspandpvr; //0b0 rq/rsp followed by 0b000 proto ver.
         uint32_t message_len;
         ENCVAL_TEMP tokening;
         enum MESSAGE_TYPE type;
         uint64_t message_id_or_response_to;
         //Sadly, we're not allowed to place variable-length data within a struct. After this struct, the data follows.
-}
+};
 class ProtocolHandler{
         public:
                 enum PARSING_RESULT handleCMSG(char * data, uint32_t packet_length, UserSession * ses_assoc);
