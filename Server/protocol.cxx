@@ -1,4 +1,8 @@
 #include "headers/protocol.H"
+#include <stdio.h>
+bool verifyToken(ENCVAL_TEMP token, UserSession * ses_assoc){
+	return true;
+}//TODO
 enum PARSING_RESULT ProtocolHandler::handleCMSG(char * data, uint32_t packet_length, UserSession * ses_assoc){
 	if(!data) return PR_GARBAGE_OURFAULT;
 	if(packet_length < sizeof(struct Protocol_Msg)) return PR_GARBAGE;
@@ -8,6 +12,7 @@ enum PARSING_RESULT ProtocolHandler::handleCMSG(char * data, uint32_t packet_len
 	if(pmsg->message_len != packet_length) return PR_PARTRECV;
 	data = data-sizeof(struct Protocol_Msg);
 	if((pmsg->rqrspandpvr&0b111)!=PROTOCOL_VERSION) return PR_PROTOMISMATCH; 
+	printf("1 ? protocol message passed.\n");
 	switch(pmsg->type){
 		case CS_AUTHRQ:
 		case CS_LOGINRQ:
@@ -22,6 +27,8 @@ enum PARSING_RESULT ProtocolHandler::handleCMSG(char * data, uint32_t packet_len
 				return PR_ILLOGICAL;
 			}
 	}
+	//we have validated that everything works. we can now actually do shit (TODO)
+	printf("1 'successful' protocol message passed.\n");
 	return PR_SUCCESSFUL;
 }
 void ProtocolHandler::sendCRQ(enum MESSAGE_TYPE t, ENCVAL_TEMP sctoken, uint32_t message_len, char * data, UserSession * ses_assoc){

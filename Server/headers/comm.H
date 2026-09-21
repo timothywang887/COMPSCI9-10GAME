@@ -2,6 +2,8 @@
 #define H_COMM
 #include <steam/steamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
+#include "protocol.H"
+#include "session.H"
 class Server{
 	public: 
 		int doLiterallyEverything(uint32_t port);
@@ -10,6 +12,7 @@ class Server{
 		HSteamNetPollGroup m_hPollGroup;
 		HSteamListenSocket m_hListenSock;
 		SessionsManager Sessions;
+		ProtocolHandler PH;
 		void GNS_PollIncoming();
 		void GNS_SteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t change);
 		static Server *s_pCallbackInstance;
