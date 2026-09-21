@@ -1,7 +1,9 @@
 #include <list>
 #include <steam/steamnetworkingsockets.h>
+#include <steam/isteamnetworkingsockets.h>
 #include <steam/isteamnetworkingutils.h>
 #include "headers/session.H"
+#include "headers/comm.H"
 #include <cassert>
 bool operator==(const User& a, const User& b){
 	return a.user_id==b.user_id;
@@ -35,5 +37,5 @@ bool SessionsManager::addUserSession(HSteamNetConnection m_hConn){
 }
 
 EResult UserSession::sendMessageTo(char * data, uint32_t length, int nSendFlags){
-	return SendMessageToConnection(this.m_hConn, data, length, nSendFlags, NULL);
+	return SERVER_INSTANCE.m_pInterface->SendMessageToConnection(this->m_hConn, data, length, nSendFlags, NULL);
 }
