@@ -79,3 +79,6 @@ crashlytics-build.properties
 
 #Ignore .blend1 files - they are only backups. Keep them on your machine, but do not push them
 *.blend1
+vcpgk.json
+vcpkg/
+CmakeLists.txt
