@@ -1,9 +1,9 @@
 public interface IWeapon
 {
-    int Damage { get; set; }
-    float Range { get; set; }
-    float AttackSpeed { get; set; }
-    string WeaponType { get; set; }
+    int damage { get; set; }
+    float range { get; set; }
+    float attackSpeed { get; set; }
+    string weaponType { get; set; }
 
-    void Attack();
+    void attack();
 }

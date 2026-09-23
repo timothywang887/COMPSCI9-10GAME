@@ -1,11 +1,11 @@
 public interface IUISlider
 {
-    float Value { get; set; }
-    float MinValue { get; set; }
-    float MaxValue { get; set; }
-    bool IsInteractable { get; set; }
+    float value { get; set; }
+    float minValue { get; set; }
+    float maxValue { get; set; }
+    bool isInteractable { get; set; }
 
-    void OnValueChanged(float newValue);
-    void OnDragStart();
-    void OnDragEnd();
+    void onValueChanged(float newValue);
+    void onDragStart();
+    void onDragEnd();
 }

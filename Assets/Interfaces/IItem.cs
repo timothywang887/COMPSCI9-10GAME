@@ -1,9 +1,9 @@
 public interface IItem
 {
-    string Name { get; set; }
-    string Description { get; set; }
-    string ItemType { get; set; }
-    string IconPath { get; set; }
+    string name { get; set; }
+    string description { get; set; }
+    string itemType { get; set; }
+    string iconPath { get; set; }
 
-    void Use();
+    void use();
 }

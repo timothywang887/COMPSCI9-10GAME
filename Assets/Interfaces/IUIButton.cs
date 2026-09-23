@@ -1,16 +1,16 @@
 public interface IUIButton
 {
-    float Width { get; set; }
-    float Height { get; set; }
-    float PositionX { get; set; }
-    float PositionY { get; set; }
-    float Rotation { get; set; }
-    string Text { get; set; }
-    bool IsInteractable { get; set; }
+    float width { get; set; }
+    float height { get; set; }
+    float positionX { get; set; }
+    float positionY { get; set; }
+    float rotation { get; set; }
+    string text { get; set; }
+    bool isInteractable { get; set; }
     
-    void OnClickStart();
-    void OnClickEnd();
-    void OnHoverStart();
-    void OnHoverEnd();
-    void Click(); // call this to simulate a click on the button
+    void onClickStart();
+    void onClickEnd();
+    void onHoverStart();
+    void onHoverEnd();
+    void click(); // call this to simulate a click on the button
 }

@@ -1,8 +1,8 @@
 public interface IHealth
 {
-    float CurrentHealth { get; set; }
-    float MaxHealth { get; set; }
-    bool IsAlive { get; set; }
+    float currentHealth { get; set; }
+    float maxHealth { get; set; }
+    bool isAlive { get; set; }
 
-    void ChangeHealth(float amount);
+    void changeHealth(float amount);
 }

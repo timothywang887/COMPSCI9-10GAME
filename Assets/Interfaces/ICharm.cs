@@ -1,9 +1,9 @@
 public interface ICharm
 {
-    string Name { get; set; }
-    string Description { get; set; }
-    string CharmType { get; set; }
-    string IconPath { get; set; }
+    string name { get; set; }
+    string description { get; set; }
+    string charmType { get; set; }
+    string iconPath { get; set; }
 
-    void Activate();
+    void activate();
 }
