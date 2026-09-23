@@ -13,3 +13,7 @@
 * Non C# files should be named in snake_case.
 * Folders should be named in PascalCase.
 * C# files should be named in PascalCase. The name of the file should match the name of the class inside it. If there are multiple classes in a file, the file name should match the name of the main class in it.
+
+## Commit Names
+* Commits should be very descriptive. At least 3 words.
+* Just be smart about it please.
