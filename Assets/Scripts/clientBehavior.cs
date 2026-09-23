@@ -46,7 +46,7 @@ public class clientBehavior : MonoBehaviour
     NetworkingUtils utils;
 
     uint connection = 0;
-    Address address = new Address();
+    Address address;
     NetworkingSockets client;
     ushort port; // placeholder for port number
     StatusCallback statusCallback;
@@ -57,10 +57,13 @@ public class clientBehavior : MonoBehaviour
         Library.Initialize();
         client = new NetworkingSockets();
         utils = new NetworkingUtils();
+        port = 1263;
+        print("Awake runs");
 
     }
     void Start()
     {
+        print("Start runs");
         statusCallback = (ref StatusInfo info) =>
         {
             switch (info.connectionInfo.state)
@@ -88,6 +91,7 @@ public class clientBehavior : MonoBehaviour
 
         // Unsure about the ip(it can change) or the port.
         address.SetAddress("10.230.41.9", port);
+        print("Connecting to server");
         connection = client.Connect(ref address);
 
 
