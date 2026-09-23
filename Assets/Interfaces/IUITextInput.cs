@@ -9,10 +9,10 @@ public interface IUITextInput
     string placeholderText { get; set; }
     bool isInteractable { get; set; }
     
-    void onClickStart();
-    void onClickEnd();
-    void onHoverStart();
-    void onHoverEnd();
-    void onTextChanged(string newText);
-    void click(); // call this to simulate a click on the button
+    void OnClickStart();
+    void OnClickEnd();
+    void OnHoverStart();
+    void OnHoverEnd();
+    void OnTextChanged(string _newText);
+    void Click(); // call this to simulate a click on the button
 }

@@ -8,9 +8,9 @@ public interface IUIButton
     string text { get; set; }
     bool isInteractable { get; set; }
     
-    void onClickStart();
-    void onClickEnd();
-    void onHoverStart();
-    void onHoverEnd();
-    void click(); // call this to simulate a click on the button
+    void OnClickStart();
+    void OnClickEnd();
+    void OnHoverStart();
+    void OnHoverEnd();
+    void Click(); // call this to simulate a click on the button
 }

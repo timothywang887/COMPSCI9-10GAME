@@ -5,7 +5,7 @@ public interface IUISlider
     float maxValue { get; set; }
     bool isInteractable { get; set; }
 
-    void onValueChanged(float newValue);
-    void onDragStart();
-    void onDragEnd();
+    void OnValueChanged(float _newValue);
+    void OnDragStart();
+    void OnDragEnd();
 }

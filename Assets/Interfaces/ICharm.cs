@@ -5,5 +5,5 @@ public interface ICharm
     string charmType { get; set; }
     string iconPath { get; set; }
 
-    void activate();
+    void Activate();
 }
