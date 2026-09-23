@@ -5,5 +5,5 @@ public interface IItem
     string itemType { get; set; }
     string iconPath { get; set; }
 
-    void use();
+    void Use();
 }

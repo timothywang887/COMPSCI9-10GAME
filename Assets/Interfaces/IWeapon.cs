@@ -5,5 +5,5 @@ public interface IWeapon
     float attackSpeed { get; set; }
     string weaponType { get; set; }
 
-    void attack();
+    void Attack();
 }

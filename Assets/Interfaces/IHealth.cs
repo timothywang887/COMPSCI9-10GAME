@@ -4,5 +4,5 @@ public interface IHealth
     float maxHealth { get; set; }
     bool isAlive { get; set; }
 
-    void changeHealth(float amount);
+    void ChangeHealth(float _amount);
 }
