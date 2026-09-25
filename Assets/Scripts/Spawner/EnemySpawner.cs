@@ -3,8 +3,8 @@ using UnityEngine;
 public class TargetedSpawner : MonoBehaviour
 {
     public GameObject prefabToSpawn;
-    public float spawnRate = 2.0f;
-    public float spawnRadius = 5.0f;
+    public float enemySpawnRate = 2.0f;
+    public float enemySpawnRadius = 3.0f;
 
     [Tooltip("Drag the 'original' reference object here (e.g., Player or Base). If left empty, it defaults to this spawner.")]
     public Transform originalObjectCenter; 
@@ -15,7 +15,7 @@ public class TargetedSpawner : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (timer >= spawnRate)
+        if (timer >= enemySpawnRate)
         {
             SpawnNearOriginal();
             timer = 0.0f;
@@ -24,24 +24,29 @@ public class TargetedSpawner : MonoBehaviour
 
     void SpawnNearOriginal()
     {
-        // Fallback: If no original object is assigned, use this spawner's position
         Vector3 centerPoint = originalObjectCenter != null ? originalObjectCenter.position : transform.position;
-
-        // Calculate offset bounded by your maximum radius
-        Vector3 randomOffset = Random.insideUnitSphere * spawnRadius;
-        
-        // Keep it flat on the horizontal plane if it's a 3D ground game
+        Vector3 randomOffset = Random.insideUnitSphere * enemySpawnRadius;
         randomOffset.y = 0; 
 
         Vector3 finalSpawnPosition = centerPoint + randomOffset;
 
-        Instantiate(prefabToSpawn, finalSpawnPosition, transform.rotation);
+        GameObject spawnedClone = Instantiate(prefabToSpawn, finalSpawnPosition, transform.rotation);
+
+        if (spawnedClone.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        {
+            rb.useGravity = true;
+        }
+        else
+        {
+            Rigidbody newRb = spawnedClone.AddComponent<Rigidbody>();
+            newRb.useGravity = true;
+        }
     }
 
     private void OnDrawGizmosSelected()
     {
         Vector3 centerPoint = originalObjectCenter != null ? originalObjectCenter.position : transform.position;
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(centerPoint, spawnRadius);
+        Gizmos.DrawWireSphere(centerPoint, enemySpawnRadius);
     }
 }
