@@ -45,7 +45,7 @@ public class clientBehavior : MonoBehaviour
 
     NetworkingUtils utils;
 
-    uint connection = 0;
+    [SerializeField] uint connection = 0;
     Address address;
     NetworkingSockets client;
     ushort port; // placeholder for port number
@@ -90,9 +90,10 @@ public class clientBehavior : MonoBehaviour
 
 
         // Unsure about the ip(it can change) or the port.
-        address.SetAddress("10.230.41.9", port);
+        address.SetAddress("10.230.45.81", port);
         print("Connecting to server");
         connection = client.Connect(ref address);
+        Send("Hello, server!");
 
 
         messageCallback = (in NetworkingMessage netMessage) =>
@@ -115,8 +116,21 @@ public class clientBehavior : MonoBehaviour
 
     private void Send(string message)
     {
+        print("Sending message: " + message);
         byte[] messageBytes = Encoding.UTF8.GetBytes(message);
         client.SendMessageToConnection(connection, messageBytes);
+    }
+
+    public void SayHello()
+    {
+        print("Sending Hello, server!");
+        Send("Hello, server!");
+    }
+
+    public void connectToServer()
+    {
+        print("conection attempt");
+        connection = client.Connect(ref address);
     }
 }
 
