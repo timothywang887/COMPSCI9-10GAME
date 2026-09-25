@@ -11,6 +11,7 @@
 
 ## File Naming Conventions
 * Non C# files should be named in snake_case.
+* Finalized 3d models and sound files created in-house should follow the format of assetname_initials (ex: sword_hn)
 * Folders should be named in PascalCase.
 * C# files should be named in PascalCase. The name of the file should match the name of the class inside it. If there are multiple classes in a file, the file name should match the name of the main class in it.
 
