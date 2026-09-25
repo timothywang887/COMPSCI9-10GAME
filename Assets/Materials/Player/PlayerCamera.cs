@@ -111,7 +111,7 @@ public class PlayerCamera : MonoBehaviour
             // 4. Handle Mouse Turning Z-Roll (Mouse roll combined with movement roll)
             float targetMouseRoll = Mathf.Clamp((-smoothTurnVelocity) * 75f, -200f, 200f) * mouseTiltFactor;
             float rollLerpSpeed = 8f;
-            Debug.Log(Mathf.Exp(-rollLerpSpeed * Time.deltaTime));
+            //Debug.Log(Mathf.Exp(-rollLerpSpeed * Time.deltaTime));
             float rollDecayFactor = 1f - Mathf.Exp(-rollLerpSpeed * Time.deltaTime);
             currentZRoll = Mathf.Lerp(currentZRoll, targetMouseRoll, rollDecayFactor);
 
