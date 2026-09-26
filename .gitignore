@@ -82,3 +82,7 @@ crashlytics-build.properties
 vcpgk.json
 vcpkg/
 CmakeLists.txt
+Unity/Library/LibraryInitializing
+Unity/ProjectSettings/ProjectVersion.txt
+Unity/Temp/UnityLockfile
+/Unity/Temp
