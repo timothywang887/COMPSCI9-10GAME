@@ -3,7 +3,8 @@ using Valve.Sockets;
 using System;
 using System.Text;
 using System.Collections.Generic;
-//using ENCVAL_TEMP = System.Char[];
+using System.Linq;
+using System.Runtime.InteropServices;
 public class clientBehavior : MonoBehaviour
 {
 
@@ -32,15 +33,15 @@ public class clientBehavior : MonoBehaviour
         SC_TOKENRSP,
     }
 
-
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
     struct Protocol_Msg
     {
-        char[] wizardweedchecksum;//size 10
-        ushort rqrspandpvr;
-        uint message_len;
-        char[] tokening;//size 2048
-        MESSAGE_TYPE type;
-        ulong message_id_or_response_to;
+        public byte[] wizardweedchecksum;//size 10
+        public byte rqrspandpvr;
+        public uint message_len;
+        public byte[] tokening;//size 2048
+        public MESSAGE_TYPE type;
+        public ulong message_id_or_response_to;
     }
 
     NetworkingUtils utils;
@@ -58,12 +59,10 @@ public class clientBehavior : MonoBehaviour
         client = new NetworkingSockets();
         utils = new NetworkingUtils();
         port = 1263;
-        print("Awake runs");
 
     }
     void Start()
     {
-        print("Start runs");
         statusCallback = (ref StatusInfo info) =>
         {
             switch (info.connectionInfo.state)
@@ -91,10 +90,7 @@ public class clientBehavior : MonoBehaviour
 
         // Unsure about the ip(it can change) or the port.
         address.SetAddress("10.230.45.81", port);
-        print("Connecting to server");
-        connection = client.Connect(ref address);
-        Send("Hello, server!");
-
+        connectToServer();
 
         messageCallback = (in NetworkingMessage netMessage) =>
         {
@@ -107,26 +103,58 @@ public class clientBehavior : MonoBehaviour
     {
         client.RunCallbacks();
 
-
         client.ReceiveMessagesOnConnection(connection, messageCallback, 20);
-
-
     }
 
 
-    private void Send(string message)
+    private void SendMessageToServer(byte[] message, byte rqrspandpvr, byte[] token, MESSAGE_TYPE type, ulong message_id_or_response_to)
     {
         print("Sending message: " + message);
-        byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-        client.SendMessageToConnection(connection, messageBytes);
+        Protocol_Msg msg = new Protocol_Msg();
+        msg.rqrspandpvr = rqrspandpvr;
+        msg.message_len = (uint)message.Length;
+        print("Message length: " + msg.message_len);
+        msg.tokening = token;
+        msg.type = type;
+        msg.message_id_or_response_to = message_id_or_response_to;
+        msg.wizardweedchecksum = Encoding.UTF8.GetBytes("WIZARDWEED");
+
+        byte[] rqrspandpvrBytes = new byte[] { rqrspandpvr };
+        byte[] messageLengthBytes = BitConverter.GetBytes(msg.message_len);
+        byte[] typeBytes = new byte [] { (byte) type };
+        byte[] messageIdOrResponseToBytes = BitConverter.GetBytes(msg.message_id_or_response_to);
+
+        byte[] fullMsg = msg.wizardweedchecksum
+            .Concat(rqrspandpvrBytes)
+            .Concat(messageLengthBytes)
+            .Concat(msg.tokening)
+            .Concat(typeBytes)
+            .Concat(messageIdOrResponseToBytes)
+            .Concat(message)
+            .ToArray();
+
+        client.SendMessageToConnection(connection, fullMsg);
+        print("messageIDorResp length is: " + messageIdOrResponseToBytes.Length);
+        print("messageLengthBytes length is: " + messageLengthBytes.Length);
+        print("typeBytes length is: " + typeBytes.Length);
+        print("rqrspandpvrBytes length is: " + rqrspandpvrBytes.Length);
+        print("token length is: " + msg.tokening.Length);
+
+        print(rqrspandpvr);
+
+        //Im missing 2 bytes
+
     }
 
-    public void SayHello()
+    public void sayHello()
     {
-        print("Sending Hello, server!");
-        Send("Hello, server!");
+        byte[] randToken = new byte[2048];
+        for (int i = 0; i < randToken.Length; i++)
+        {
+            randToken[i] = (byte)UnityEngine.Random.Range(0, 256);
+        }
+        SendMessageToServer(new byte[] { 0x0 }, 0b1, randToken, MESSAGE_TYPE.CS_LOGINRQ, 0);
     }
-
     public void connectToServer()
     {
         print("conection attempt");
