@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 public class clientBehavior : MonoBehaviour
 {
-
     enum PARSING_RESLULT
     {
         PR_GARBAGE,
@@ -33,6 +32,12 @@ public class clientBehavior : MonoBehaviour
         SC_TOKENRSP,
     }
 
+
+
+    byte rqr = 0b00010000;
+    byte rsp = 0b00000000;
+
+
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
     struct Protocol_Msg
     {
@@ -50,8 +55,10 @@ public class clientBehavior : MonoBehaviour
     Address address;
     NetworkingSockets client;
     ushort port; // placeholder for port number
+    byte protoVer = 0b00000000;
     StatusCallback statusCallback;
     MessageCallback messageCallback;
+
 
     void Awake()
     {
@@ -59,7 +66,8 @@ public class clientBehavior : MonoBehaviour
         client = new NetworkingSockets();
         utils = new NetworkingUtils();
         port = 1263;
-
+        print("The bitconverter is in little endian: " + BitConverter.IsLittleEndian);
+        print("Protocol version: " + protoVer);
     }
     void Start()
     {
@@ -89,7 +97,7 @@ public class clientBehavior : MonoBehaviour
 
 
         // Unsure about the ip(it can change) or the port.
-        address.SetAddress("10.230.45.81", port);
+        address.SetAddress("10.230.48.228", port);
         connectToServer();
 
         messageCallback = (in NetworkingMessage netMessage) =>
@@ -111,8 +119,8 @@ public class clientBehavior : MonoBehaviour
     {
         print("Sending message: " + message);
         Protocol_Msg msg = new Protocol_Msg();
-        msg.rqrspandpvr = rqrspandpvr;
-        msg.message_len = (uint)message.Length;
+        msg.rqrspandpvr = (byte)(rqrspandpvr|protoVer);
+        msg.message_len = (uint)message.Length +2075;
         print("Message length: " + msg.message_len);
         msg.tokening = token;
         msg.type = type;
@@ -121,7 +129,7 @@ public class clientBehavior : MonoBehaviour
 
         byte[] rqrspandpvrBytes = new byte[] { rqrspandpvr };
         byte[] messageLengthBytes = BitConverter.GetBytes(msg.message_len);
-        byte[] typeBytes = new byte [] { (byte) type };
+        byte[] typeBytes = BitConverter.GetBytes((int)msg.type);
         byte[] messageIdOrResponseToBytes = BitConverter.GetBytes(msg.message_id_or_response_to);
 
         byte[] fullMsg = msg.wizardweedchecksum
@@ -134,13 +142,15 @@ public class clientBehavior : MonoBehaviour
             .ToArray();
 
         client.SendMessageToConnection(connection, fullMsg);
-        print("messageIDorResp length is: " + messageIdOrResponseToBytes.Length);
-        print("messageLengthBytes length is: " + messageLengthBytes.Length);
-        print("typeBytes length is: " + typeBytes.Length);
+        print("Wizardweed checksum length is: " + msg.wizardweedchecksum.Length);
         print("rqrspandpvrBytes length is: " + rqrspandpvrBytes.Length);
+        print("messageLengthBytes length is: " + messageLengthBytes.Length);
         print("token length is: " + msg.tokening.Length);
+        print("typeBytes length is: " + typeBytes.Length);
+        print("messageIDorResp length is: " + messageIdOrResponseToBytes.Length);
+        print("fullMsg length is: " + fullMsg.Length);
+        print("message length is: " + message.Length);
 
-        print(rqrspandpvr);
 
         //Im missing 2 bytes
 
@@ -153,7 +163,7 @@ public class clientBehavior : MonoBehaviour
         {
             randToken[i] = (byte)UnityEngine.Random.Range(0, 256);
         }
-        SendMessageToServer(new byte[] { 0x0 }, 0b1, randToken, MESSAGE_TYPE.CS_LOGINRQ, 0);
+        SendMessageToServer(new byte[] { 0x0 }, rqr, randToken, MESSAGE_TYPE.CS_LOGINRQ, 0);
     }
     public void connectToServer()
     {
