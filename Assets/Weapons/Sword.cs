@@ -2,38 +2,45 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    float atkdr = 0;
-    float slash = 0;
-    float atkrt = 0;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    public Vector3 restAngles;
+    public Vector3 swingAngles; 
+    public float swingSpeed = 12f;
+
+    public float swingTime = 1f;   
+    float timer = 0;
+  
+
+    private Quaternion restRotation;
+    private Quaternion swingRotation;
+    private Quaternion targetRotation;
+
     void Start()
     {
-        float atkdr = 0.15f;
-        float slash = 0;
-        float atkrt = 0;
+        restRotation = Quaternion.Euler(restAngles);
+        swingRotation = Quaternion.Euler(swingAngles);
+
+        transform.localRotation = restRotation;
+        targetRotation = restRotation;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-       if (Input.GetMouseButtonDown(0) && atkrt <= 0)
-       {
-        slash=1;
-        atkrt=0.5f;
-       }
-       if (atkrt > 0)
-       { 
-           atkrt -= Time.deltaTime;
-       }
-        if (slash > 0)
+        restRotation = Quaternion.Euler(restAngles);
+        swingRotation = Quaternion.Euler(swingAngles);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, swingSpeed * Time.deltaTime);
+
+        if (Input.GetMouseButtonDown(0))
         {
-            atkdr -= Time.deltaTime;
-            print("Swash");
-        }
-        if (atkdr <= 0)
+        targetRotation = swingRotation;
+        print("swing");
+        timer = swingTime;
+        } 
+        timer -= Time.deltaTime;
+        if (timer < 0)
         {
-            slash = 0;
-            atkdr = 0.15f;
+            targetRotation = restRotation;
         }
     }
 }
