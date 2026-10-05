@@ -31,6 +31,13 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (CompareTag("Enemy") && collision.collider.GetComponentInParent<Sword>() != null)
+        {
+            TakeDamage(15f);
+        }
+    }
 
     public void Die()
     {
