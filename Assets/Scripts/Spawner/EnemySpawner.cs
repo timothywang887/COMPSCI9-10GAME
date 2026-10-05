@@ -7,7 +7,7 @@ public class TargetedSpawner : MonoBehaviour
     public float enemySpawnRadius = 3.0f;
 
     [Tooltip("Drag the 'original' reference object here (e.g., Player or Base). If left empty, it defaults to this spawner.")]
-    public Transform originalObjectCenter; 
+    private Transform originalObjectCenter; 
 
     private float timer = 0.0f;
 
