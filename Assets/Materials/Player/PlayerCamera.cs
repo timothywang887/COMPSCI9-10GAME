@@ -13,13 +13,13 @@ public class PlayerCamera : MonoBehaviour
 
     private float xRotation = 0f;
 
-    public float wobbleSpeed = 1f;
-    public float wobbleAmount = 0.1f;
+    public float wobbleSpeed = 0.3f;
+    public float wobbleAmount = 0.003f;
 
     [Header("Movement Tilt Settings")]
-    public float tiltAmountX = 2f;        // Pitch tilt intensity (forward/backward)
-    public float tiltAmountY = 2f;        // Vertical movement tilt intensity (jumping/falling)
-    public float tiltAmountZ = 3f;        // Roll tilt intensity (strafing left/right)
+    public float tiltAmountX = 1f;        // Pitch tilt intensity (forward/backward)
+    public float tiltAmountY = 1f;        // Vertical movement tilt intensity (jumping/falling)
+    public float tiltAmountZ = 1f;        // Roll tilt intensity (strafing left/right)
     public float movementTiltSpeed = 5f;  // Speed of the tilt reaction
     public float mouseTiltFactor = 0.3f; //amount of tilt horizontal mouse movement causes
 
