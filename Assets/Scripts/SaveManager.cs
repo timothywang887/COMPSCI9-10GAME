@@ -49,5 +49,10 @@ public class SaveManager : MonoBehaviour
             public float volume;
             public string sensitivity;
         }
+        
+        public class Token
+        {
+            public string token;
+        }
     }
 }
