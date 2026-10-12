@@ -3,7 +3,57 @@ guid: 3eb995f535bf14df5a75e6e68fa88e15
 ModelImporter:
   serializedVersion: 24600
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 25f6eff9586b24dc29c7688101b2ed67, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 25fdf5e65b27e4f5a8798711967b695f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: e7509fbb04e554ea494054ae859328f9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 0eb6e4eb13bb34728a53dea079304e5e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.004
+    second: {fileID: 2100000, guid: 26deb341df38f47bb94ecb631acb121c, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Leather030_1K-JPG_Color
+    second: {fileID: 2800000, guid: 6eacccedeb92644d2b45462e81c5eff7, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Leather033C_1K-JPG_Color
+    second: {fileID: 2800000, guid: 255d5f9415c374a15b329e3c02339509, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Metal003_1K-JPG_Color
+    second: {fileID: 2800000, guid: bbc0c507076164cb7a7dd9c75c05fd8f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Metal041A_1K-JPG_Color
+    second: {fileID: 2800000, guid: 134f1611e2c834b359785f9bd488f041, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Onyx006_1K-JPG_Color
+    second: {fileID: 2800000, guid: 639f0236532784df393c0db2e0d4fcf0, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
