@@ -117,7 +117,7 @@ public class Sword : MonoBehaviour
        movespeed = jabMoveSpeed;
        }
 
-       if (Input.GetMouseButtonDown(3))
+       if (Input.GetMouseButtonDown(1))
        {
        attack = 3;
        targetRotation = blockStartRotation;
