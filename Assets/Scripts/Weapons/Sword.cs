@@ -28,6 +28,15 @@ public class Sword : MonoBehaviour
    public Vector3 jabEndPosition;
    public float jabMoveSpeed = 10;
 
+      [Header("Block")]
+   public Vector3 blockStartAngles;
+   public Vector3 blockEndAngles;
+   public float blockSpeed = 12f;
+   public float blockTime = 1f;  
+   public Vector3 blockStartPosition;
+   public Vector3 blockEndPosition;
+   public float blockMoveSpeed = 10;
+
 
 
 
@@ -41,10 +50,11 @@ public class Sword : MonoBehaviour
    private Vector3 targetPosition;
    private Quaternion swingStartRotation;
    private Quaternion swingEndRotation;
-
-
    private Quaternion jabStartRotation;
    private Quaternion jabEndRotation;
+
+    private Quaternion blockStartRotation;
+   private Quaternion blockEndRotation;
    private Quaternion targetRotation;
    private Quaternion defaultRotation;
 
@@ -77,6 +87,9 @@ public class Sword : MonoBehaviour
        jabStartRotation = Quaternion.Euler(jabStartAngles);
        jabEndRotation = Quaternion.Euler(jabEndAngles);
        defaultRotation = Quaternion.Euler(defaultAngles);
+       blockStartRotation = Quaternion.Euler(blockStartAngles);
+       blockEndRotation = Quaternion.Euler(blockEndAngles);
+       
 
 
        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, speed * Time.deltaTime);
@@ -98,10 +111,21 @@ public class Sword : MonoBehaviour
        attack = 2;
        targetRotation = jabStartRotation;
        targetPosition = jabStartPosition;
-       print("swing");
+       print("jab");
        speed = jabSpeed;
        timer = jabTime;
        movespeed = jabMoveSpeed;
+       }
+
+       if (Input.GetMouseButtonDown(3))
+       {
+       attack = 3;
+       targetRotation = blockStartRotation;
+       targetPosition = blockStartPosition;
+       print("block");
+       speed = blockSpeed;
+       timer = blockTime;
+       movespeed = blockMoveSpeed;
        }
       
        if (attack == 1)
@@ -143,8 +167,27 @@ public class Sword : MonoBehaviour
                    timer = jabTime;
                }
            }
+        }
+        if (attack == 3)
+       {
+           if (timer<0)
+           {
+               if (end == 1)
+               {
+                   end = 0;
+                   attack = 0;
+                   targetPosition = defaultPosition;
+                   targetRotation = defaultRotation;
+               }
+               else
+               {
+                   end = 1;
+                   targetPosition = blockEndPosition;
+                   targetRotation = blockEndRotation;
+                   timer = blockTime;
+               }
+           }
        }
-      
    }
 
 
