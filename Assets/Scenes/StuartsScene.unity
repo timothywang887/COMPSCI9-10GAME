@@ -265,19 +265,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3eb995f535bf14df5a75e6e68fa88e15, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3eb995f535bf14df5a75e6e68fa88e15, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3eb995f535bf14df5a75e6e68fa88e15, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3eb995f535bf14df5a75e6e68fa88e15, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3eb995f535bf14df5a75e6e68fa88e15, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -285,7 +285,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3eb995f535bf14df5a75e6e68fa88e15, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3eb995f535bf14df5a75e6e68fa88e15, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -298,6 +298,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3eb995f535bf14df5a75e6e68fa88e15, type: 3}
       propertyPath: m_Name
       value: longsword_jb
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3eb995f535bf14df5a75e6e68fa88e15, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -427,7 +431,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 875776104}
+  m_Mesh: {fileID: 758380528}
 --- !u!23 &437933730
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -484,7 +488,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 437933726}
-  m_Mesh: {fileID: 875776104}
+  m_Mesh: {fileID: 758380528}
 --- !u!1 &661842448
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,11 +534,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10c29b3f07144bd88e76af6faa17514, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sword
-  restAngles: {x: 0, y: 0, z: 0}
-  swingAngles: {x: 70, y: -20, z: 0}
+  defaultAngles: {x: 0, y: 90, z: 0}
+  defaultPosition: {x: 0.8, y: -0.7, z: 1}
+  swingStartAngles: {x: 0, y: 0, z: -30}
+  swingEndAngles: {x: 70, y: -40, z: 0}
   swingSpeed: 35
   swingTime: 0.35
---- !u!43 &875776104
+  swingStartPosition: {x: 2, y: -0.7, z: 1}
+  swingEndPosition: {x: -1, y: -0.7, z: 1}
+  swingMoveSpeed: 10
+  jabStartAngles: {x: 80, y: 0, z: 0}
+  jabEndAngles: {x: 80, y: 0, z: 0}
+  jabSpeed: 20
+  jabTime: 0.25
+  jabStartPosition: {x: 0.8, y: -0.4, z: 1}
+  jabEndPosition: {x: 0, y: 0, z: 3}
+  jabMoveSpeed: 20
+--- !u!43 &758380528
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1390,7 +1406,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 3.51
   m_Height: 58.8
@@ -1975,7 +1991,7 @@ Transform:
   m_GameObject: {fileID: 1933424189}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

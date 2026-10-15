@@ -14,11 +14,7 @@ public class EnemyHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage(5f);
-            print("space");
-        }
+        
     }
 
     public void TakeDamage(float damage)
