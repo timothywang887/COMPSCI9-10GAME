@@ -29,7 +29,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveDir = (transform.forward * input.y) + (transform.right * input.x);
         
         // 3. Set target velocity (leaving Y untouched so gravity still works)
-        moveVelocity = new Vector3(moveDir.x * moveSpeed, rb.linearVelocity.y, moveDir.z * moveSpeed);
+        float currentMoveSpeed = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)
+            ? moveSpeed * 3f
+            : moveSpeed;
+        moveVelocity = new Vector3(moveDir.x * currentMoveSpeed, rb.linearVelocity.y, moveDir.z * currentMoveSpeed);
 
         // 4. Check ground status
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
