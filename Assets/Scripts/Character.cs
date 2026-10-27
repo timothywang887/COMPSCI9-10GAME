@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    public float health;
-    public Mesh model;
-    public Collider collider;
+    [SerializeField] private float health;
+    [SerializeField] private Mesh model;
+    [SerializeField] private Collider collider;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,5 +16,15 @@ public class Character : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public float GetHealth()
+    {
+        return health;
+    }
+
+    public void SetHealth(float value)
+    {
+        health = value;
     }
 }
