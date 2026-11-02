@@ -20,6 +20,27 @@ namespace ClientStructs
         byte[] unlocked;// size 16
     }
 
+    enum ITEM_RELICS
+    {
+        
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Item_WEAPON
+    {
+        ITEM_WEAPONS type;
+        Item_SkillTree tree;
+        byte level;//uint8
+        double xp;
+    }
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct GameSessionData_Player_Inventory
+    {//Temporary to session
+        Item_WEAPON weapon;
+        ITEM_RELICS relic;
+        //Also 3 consumables in the loadout which appear somewhere in the map.
+    }
+    
 
 
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
@@ -133,11 +154,74 @@ namespace ClientStructs
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
-    struct GamesessionData_PLAYER_INIT
+    struct GameSessionData_PLAYER_INIT
     {
         PositionOrientationVelocity pos;
         GameSessionData_Player_Inventory inv;
+        byte player_no;//uint8
     }
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Protocol_Msg_SC_MAPJOINRSP
+    {
+        CastleData_CASTLE castle;
+        MAP_DIFFICULTY difficulty;
+        ulong join_code;
+        GameSessionData_PLAYER_INIT you;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Protocol_Msg_SC_GSSJOINRSP
+    {
+        
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct playerPositionUpdate
+    {
+        PositionOrientationVelocity pos;
+        byte player_no;//uint8
+    }
+
+
+    enum WORLDUPDATE_TYPE
+    {
+        WORLDUPDATE_TYPE_playerPositionUpdate,
+	    WORLDUPDATE_TYPE_playerHealthUpdate,
+	    WORLDUPDATE_TYPE_playerJoinUpdate,
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct playerHealthUpdate
+    {
+        double hp;
+        bool hathshuffledoffthismortalcoil;
+        byte player_no;//uint8
+    }
+
+
+
+//this set of structs are standing in for the union switcher. It does require some logic so send the right on, but it shouldn't be terrible.
+//The more worrisome bit is that they may not be the right size. We may pad some junk on it or something, need to talk to Katie about it.
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct GWU_PLAYERPOSU
+    {
+        WORLDUPDATE_TYPE type;//always set to playerPositionUpdate
+        playerPositionUpdate u;
+    }
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct GWU_PLAYERHEALTHU
+    {
+        WORLDUPDATE_TYPE type;//always set to playerHealthUpdate
+        playerHealthUpdate u;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct GWU_PLAYERJOINU
+    {
+        WORLDUPDATE_TYPE type;//always set to playerJoinUpdate
+        GameSessionData_PLAYER_INIT u;
+    }
+
 
 
 
