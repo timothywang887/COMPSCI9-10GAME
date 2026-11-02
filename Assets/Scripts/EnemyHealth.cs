@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    // deprecated will be removed soon. Use enemy.cs instead
     public float Health = 100f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
