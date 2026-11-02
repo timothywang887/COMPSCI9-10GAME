@@ -2,59 +2,22 @@ using UnityEngine;
 using Valve.Sockets;
 using System;
 using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using ClientStructs;
 public class clientBehavior : MonoBehaviour
 {
-    enum PARSING_RESLULT
-    {
-        PR_GARBAGE,
-        PR_GARBEAGE_OURFAULT,
-        PR_ILLOGICAL,
-        PR_PROTOMISMATCH,
-        PR_PARTRECV,
-        PR_TOKENINVALID,
-        PR_SUCCESSFUL
-    }
-    enum MESSAGE_TYPE
-    {
-        CS_AUTHRQ,
-        CS_LOGINRQ,
-        CS_MAPJOINRQ,
-        CS_GSSJOINRQ,
-        CS_HSYNCRQ,
-        CS_INVSYNCHRQ,
-        CS_ANIMATIONRQ,
-
-
-        SC_HSYNCRQ,
-        SC_TOKENRSP,
-    }
-
-
+    string ip = "10.230.44.134";
 
     byte rqr = 0b00010000;
     byte rsp = 0b00000000;
-
-
-    [StructLayout(LayoutKind.Sequential, Pack = 0)]
-    struct Protocol_Msg
-    {
-        public byte[] wizardweedchecksum;//size 10
-        public byte rqrspandpvr;
-        public uint message_len;
-        public byte[] tokening;//size 2048
-        public MESSAGE_TYPE type;
-        public ulong message_id_or_response_to;
-    }
 
     NetworkingUtils utils;
 
     [SerializeField] uint connection = 0;
     Address address;
     NetworkingSockets client;
-    ushort port; // placeholder for port number
+    ushort port;
     byte protoVer = 0b00000000;
     StatusCallback statusCallback;
     MessageCallback messageCallback;
@@ -66,8 +29,7 @@ public class clientBehavior : MonoBehaviour
         client = new NetworkingSockets();
         utils = new NetworkingUtils();
         port = 1263;
-        print("The bitconverter is in little endian: " + BitConverter.IsLittleEndian);
-        print("Protocol version: " + protoVer);
+
     }
     void Start()
     {
@@ -97,7 +59,7 @@ public class clientBehavior : MonoBehaviour
 
 
         // Unsure about the ip(it can change) or the port.
-        address.SetAddress("10.230.48.228", port);
+        address.SetAddress(ip, port);
         connectToServer();
 
         messageCallback = (in NetworkingMessage netMessage) =>
@@ -117,11 +79,11 @@ public class clientBehavior : MonoBehaviour
 
     private void SendMessageToServer(byte[] message, byte rqrspandpvr, byte[] token, MESSAGE_TYPE type, ulong message_id_or_response_to)
     {
-        print("Sending message: " + message);
+
+        
         Protocol_Msg msg = new Protocol_Msg();
         msg.rqrspandpvr = (byte)(rqrspandpvr|protoVer);
         msg.message_len = (uint)message.Length +2075;
-        print("Message length: " + msg.message_len);
         msg.tokening = token;
         msg.type = type;
         msg.message_id_or_response_to = message_id_or_response_to;
@@ -142,17 +104,6 @@ public class clientBehavior : MonoBehaviour
             .ToArray();
 
         client.SendMessageToConnection(connection, fullMsg);
-        print("Wizardweed checksum length is: " + msg.wizardweedchecksum.Length);
-        print("rqrspandpvrBytes length is: " + rqrspandpvrBytes.Length);
-        print("messageLengthBytes length is: " + messageLengthBytes.Length);
-        print("token length is: " + msg.tokening.Length);
-        print("typeBytes length is: " + typeBytes.Length);
-        print("messageIDorResp length is: " + messageIdOrResponseToBytes.Length);
-        print("fullMsg length is: " + fullMsg.Length);
-        print("message length is: " + message.Length);
-
-
-        //Im missing 2 bytes
 
     }
 
@@ -170,5 +121,8 @@ public class clientBehavior : MonoBehaviour
         print("conection attempt");
         connection = client.Connect(ref address);
     }
+
+    
+
 }
 
