@@ -1,0 +1,150 @@
+using UnityEngine;
+using Valve.Sockets;
+using System;
+using System.Text;
+using System.Linq;
+using System.Runtime.InteropServices;
+
+namespace ClientStructs
+{
+
+
+    enum ITEM_WEAPONS
+    {
+        
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Item_SkillTree
+    {
+        byte[] unlocked;// size 16
+    }
+
+
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Protocol_Msg_AuthRQ
+    {
+        byte[] spt;//C_SEMIPERMA size tbd
+        byte[] sk; // ENCVAL SYMETRIC TEMP size tbd
+    }
+    
+    
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Protocol_Msg_LoginRQ
+    {
+        byte[] username;//size 128
+        byte[] password;//size 128
+        byte[] sk;// ENCVAL SYMETRIC TEMP size tbd
+        //We need to use bitconverter for these, bc c# and c++ store chars differently. bitconverter UTF8 conversion will take care of it.
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Protocol_Msg_SC_TOKENRSP
+    {
+        byte[] st; //C_SEESIONTOK size tbd
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Protocol_Msg_SC_TOKENRSPWSP
+    {
+        byte[] spt; // C_SEMIPERMA size tbd
+        byte[] sk; // ENCVAL TEMP SYMMETRIC size tbd
+    }
+
+    enum MAP_DIFFICULTY:byte
+    {
+        DIFFICULTY_TRIVIAL = 0x1,
+        DIFFICULTY_EASY = 0x2,
+        DIFFICULTY_MEDIUM = 0x4,
+        DIFFICULTY_HARD = 0x8,
+        DIFFICULTY_STONED = 0x10
+    }
+
+
+    enum MAP_PUBLICITY
+    {
+	PUBLICITY_PRIVATE, //Only people with join code.
+	PUBLICITY_FRIENDS, //Only friends.
+	PUBLICITY_PUBLIC   //Everyone.
+    };
+
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Protocol_Msg_CS_MAPJOINRQ
+    {
+        ulong map_id;
+        MAP_PUBLICITY publicity;
+        MAP_DIFFICULTY difficulty_requested;
+        byte max_players;//This is a uint8. Gonna have to be careful how I assign this
+    }
+
+    enum ROTATION
+    {//to the left
+        ROTATION_0,
+        ROTATION_90,
+        ROTATION_180,
+        ROTATION_270
+    }
+
+    enum ROOM_TYPE
+    {
+        ROOM_1x1_INT_OCCUPIED  = 0x0,
+        ROOM_1x1_INT_AIR = 0x1,
+
+        ROOM_1x1_HALLWAY,
+        ROOM_1x1_Stair_MIDDLE,
+        ROOM_1x1_Stair_UP,
+        ROOM_1x1_STAIR_DOWN,
+        ROOM_1x1_COURTYARD
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct CastleData_ROOM
+    {//There is a lot that needs to be done here, Katie has notes on it in the ServerFork
+        ROTATION rotation;
+        ROOM_TYPE room_type;
+        ulong doors;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct PositionOrientationVelocity
+    {
+        double x;
+        double y;
+        double z;
+
+        double yaw;
+        double pitch;
+
+        double vx;
+        double vy;
+        double vz;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct CastleData_CASTLE
+    {
+        CastleData_ROOM[] rooms; // this is a [5][5][4]. 5x5x4
+        byte banner;//Unused use this later
+        byte[] seed;// Size 9, seed for world gen.
+        byte difficulties; //bitmap of difficulties
+        PositionOrientationVelocity spawnpos;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct GamesessionData_PLAYER_INIT
+    {
+        PositionOrientationVelocity pos;
+        GameSessionData_Player_Inventory inv;
+    }
+
+
+
+
+};
+
+
+
+
+    
