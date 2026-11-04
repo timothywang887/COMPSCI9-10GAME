@@ -87,14 +87,14 @@ public class clientBehavior : MonoBehaviour
         msg.tokening = token;
         msg.type = type;
         msg.message_id_or_response_to = message_id_or_response_to;
-        msg.wizardweedchecksum = Encoding.UTF8.GetBytes("WIZARDWEED");
+        msg.wizardweed_notchecksum = Encoding.UTF8.GetBytes("WIZARDWEED");
 
         byte[] rqrspandpvrBytes = new byte[] { rqrspandpvr };
         byte[] messageLengthBytes = BitConverter.GetBytes(msg.message_len);
         byte[] typeBytes = BitConverter.GetBytes((int)msg.type);
         byte[] messageIdOrResponseToBytes = BitConverter.GetBytes(msg.message_id_or_response_to);
 
-        byte[] fullMsg = msg.wizardweedchecksum
+        byte[] fullMsg = msg.wizardweed_notchecksum
             .Concat(rqrspandpvrBytes)
             .Concat(messageLengthBytes)
             .Concat(msg.tokening)

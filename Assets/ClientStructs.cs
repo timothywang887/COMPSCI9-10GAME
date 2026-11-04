@@ -8,6 +8,38 @@ using System.Runtime.InteropServices;
 namespace ClientStructs
 {
 
+    enum MESSAGE_TYPE{
+        CS_AUTHRQ,
+        CS_LOGINRQ,
+        CS_MAPJOINRQ,
+        CS_GSSJOINRQ,
+        CS_HSYNCRQ,
+        CS_INVSYNCRQ,
+        CS_ANIMATIONSYNCRQ,
+	CS_POSITIONUPDATE,
+	CS_ACK,
+
+        SC_HSYNCRQ,
+        SC_TOKENRSP,
+	SC_TOKENRSPWSP,
+        SC_LOGINRQ,
+        SC_GSSJOINRSP,
+	SC_WORLDUPDATE,
+	SC_MAPJOINRSP
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    struct Protocol_Msg
+    {
+        public byte[] wizardweed_notchecksum;//length 10
+        public byte rqrspandpvr; //uint8_t
+        public uint message_len;
+        public byte[] tokening;//ENCVALTEMP
+        public MESSAGE_TYPE type;
+        public ulong message_id_or_response_to;
+    }
+
+
 
     enum ITEM_WEAPONS
     {
