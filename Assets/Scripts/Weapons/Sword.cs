@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
+    public GameObject player;
+
    [Header("Default")]
 
 
@@ -68,7 +70,7 @@ public class Sword : MonoBehaviour
         defaultRotation = Quaternion.Euler(defaultAngles);
 
 
-        transform.localRotation =defaultRotation;
+        transform.localRotation = defaultRotation;
         transform.localPosition = defaultPosition;
         targetRotation = defaultRotation;
         targetPosition = defaultPosition;
@@ -77,8 +79,8 @@ public class Sword : MonoBehaviour
 
 
 
-   void Update()
-   {
+void Update()
+{
         timer -= Time.deltaTime;
 
 
@@ -99,23 +101,23 @@ public class Sword : MonoBehaviour
        if (Input.GetMouseButtonDown(0))
        {
             attack = 1;
-       targetRotation = swingStartRotation;
-       targetPosition = swingStartPosition;
-       print("swing");
-       speed = swingSpeed;
-       timer = swingTime;
-              movespeed = swingMoveSpeed;
-       }
-       if (Input.GetMouseButtonDown(2))
-       {
-       attack = 2;
-       targetRotation = jabStartRotation;
-       targetPosition = jabStartPosition;
-       print("jab");
-       speed = jabSpeed;
-       timer = jabTime;
-       movespeed = jabMoveSpeed;
-       }
+            targetRotation = swingStartRotation;
+            targetPosition = swingStartPosition;
+            print("swing");
+            speed = swingSpeed;
+            timer = swingTime;
+            movespeed = swingMoveSpeed;
+        }
+        if (Input.GetMouseButtonDown(2))
+        {
+            attack = 2;
+            targetRotation = jabStartRotation;
+            targetPosition = jabStartPosition;
+            print("jab");
+            speed = jabSpeed;
+            timer = jabTime;
+            movespeed = jabMoveSpeed;
+        }
 
        if (Input.GetMouseButtonDown(1))
        {
@@ -128,50 +130,51 @@ public class Sword : MonoBehaviour
        movespeed = blockMoveSpeed;
        }
       
-       if (attack == 1)
-       {
-                      if (timer<0)
-           {
-               if (end == 1)
-               {
-                   end = 0;
-                   attack = 0;
-                   targetPosition = defaultPosition;
-                   targetRotation = defaultRotation;
-               }
-               else
-               {
-                   end = 1;
-                   targetPosition = swingEndPosition;
-                   targetRotation = swingEndRotation;
-                   timer = swingTime;
-               }
-           }
-       }
-       if (attack == 2)
-       {
-           if (timer<0)
-           {
-               if (end == 1)
-               {
-                   end = 0;
-                   attack = 0;
-                   targetPosition = defaultPosition;
-                   targetRotation = defaultRotation;
-               }
-               else
-               {
-                   end = 1;
-                   targetPosition = jabEndPosition;
+    if (attack == 1)
+    {
+        if (timer<0)
+            {
+                if (end == 1)
+                {
+                    print("attack");
+                    end = 0;
+                    attack = 0;
+                    targetPosition = defaultPosition;
+                    targetRotation = defaultRotation;
+                }
+                else
+                {
+                    end = 1;
+                    targetPosition = swingEndPosition;
+                    targetRotation = swingEndRotation;
+                    timer = swingTime;
+                }
+            }
+        }
+    if (attack == 2)
+    {
+            if (timer<0)
+            {
+                if (end == 1)
+                {
+                    end = 0;
+                    attack = 0;
+                    targetPosition = defaultPosition;
+                    targetRotation = defaultRotation;
+                }
+                else
+                {
+                    end = 1;
+                    targetPosition = jabEndPosition;
                    targetRotation = jabEndRotation;
-                   timer = jabTime;
+                    timer = jabTime;
                }
            }
         }
         if (attack == 3)
-       {
-           if (timer<0)
-           {
+        {
+            if (timer<0)
+            {
                if (end == 1)
                {
                    end = 0;
