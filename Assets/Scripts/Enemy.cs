@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : NonPlayer
 {
+    
     //private float hp = 
     [SerializeField] private UnityEngine.AI.NavMeshAgent agent;
     [SerializeField] private Transform player;
