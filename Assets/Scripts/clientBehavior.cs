@@ -5,6 +5,7 @@ using System.Text;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ClientStructs;
+using static parsecontruct;
 public class clientBehavior : MonoBehaviour
 {
     string ip = "10.230.44.134";
@@ -14,7 +15,7 @@ public class clientBehavior : MonoBehaviour
 
     NetworkingUtils utils;
 
-    [SerializeField] uint connection = 0;
+    uint connection = 0;
     Address address;
     NetworkingSockets client;
     ushort port;
@@ -58,7 +59,6 @@ public class clientBehavior : MonoBehaviour
         utils.SetStatusCallback(statusCallback);
 
 
-        // Unsure about the ip(it can change) or the port.
         address.SetAddress(ip, port);
         connectToServer();
 
@@ -77,44 +77,14 @@ public class clientBehavior : MonoBehaviour
     }
 
 
-    private void SendMessageToServer(byte[] message, byte rqrspandpvr, byte[] token, MESSAGE_TYPE type, ulong message_id_or_response_to)
-    {
-
-        
-        Protocol_Msg msg = new Protocol_Msg();
-        msg.rqrspandpvr = (byte)(rqrspandpvr|protoVer);
-        msg.message_len = (uint)message.Length +2075;
-        msg.tokening = token;
-        msg.type = type;
-        msg.message_id_or_response_to = message_id_or_response_to;
-        msg.wizardweed_notchecksum = Encoding.UTF8.GetBytes("WIZARDWEED");
-
-        byte[] rqrspandpvrBytes = new byte[] { rqrspandpvr };
-        byte[] messageLengthBytes = BitConverter.GetBytes(msg.message_len);
-        byte[] typeBytes = BitConverter.GetBytes((int)msg.type);
-        byte[] messageIdOrResponseToBytes = BitConverter.GetBytes(msg.message_id_or_response_to);
-
-        byte[] fullMsg = msg.wizardweed_notchecksum
-            .Concat(rqrspandpvrBytes)
-            .Concat(messageLengthBytes)
-            .Concat(msg.tokening)
-            .Concat(typeBytes)
-            .Concat(messageIdOrResponseToBytes)
-            .Concat(message)
-            .ToArray();
-
-        client.SendMessageToConnection(connection, fullMsg);
-
-    }
-
-    public void sayHello()
+    public void sendMessageToServerTest()
     {
         byte[] randToken = new byte[2048];
         for (int i = 0; i < randToken.Length; i++)
         {
             randToken[i] = (byte)UnityEngine.Random.Range(0, 256);
         }
-        SendMessageToServer(new byte[] { 0x0 }, rqr, randToken, MESSAGE_TYPE.CS_LOGINRQ, 0);
+        client.SendMessageToConnection(connection,constructProtocolMsg(new byte[] { 0x0 }, rqr, randToken, MESSAGE_TYPE.CS_LOGINRQ, 0,protoVer));
     }
     public void connectToServer()
     {
